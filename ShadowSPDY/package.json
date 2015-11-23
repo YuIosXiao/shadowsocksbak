@@ -1,0 +1,41 @@
+{
+    "name": "shadowspdy",
+    "description": "a tunnel proxy using spdy as the tunnel",
+    "keywords": ["SPDY", "proxy", "http", "https", "socks", "tunnel"],
+    "author": {
+        "name":"clowwindy",
+        "email":"clowwindy42@gmail.com"
+    },
+    "version": "0.1.8",
+    "licenses": [{
+        "type": "MIT",
+        "url": "https://raw.github.com/clowwindy/shadowspdy/master/LICENSE"
+    }],
+    "engines": {
+        "node": "~0.10"
+    },
+    "directories": {
+        "lib": "./lib/shadowspdy"
+    },
+    "main": "./lib/shadowspdy/local",
+    "bin": {
+        "splocal": "./bin/splocal",
+        "spserver": "./bin/spserver"
+    },
+    "scripts": {
+        "test": "cake test"
+    },
+    "homepage": "https://github.com/clowwindy/shadowspdy",
+    "bugs": "https://github.com/clowwindy/shadowspdy/issues",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/clowwindy/shadowspdy.git"
+    },
+    "dependencies": {
+        "spdy": "=1.25.1",
+        "argparse": "=0.1.15"
+    },
+    "devDependencies": {
+        "coffee-script": ">=1.7.0"
+    }
+}

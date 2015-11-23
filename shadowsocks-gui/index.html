@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shadowsocks GUI</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <style>
+        body {
+            margin: 10px;
+            overflow-x: hidden;
+        }
+        .alert {
+            margin-bottom: 10px;
+        }
+        .col-sm-2 {
+            width: 30%;
+            line-height: 30px;
+        }
+        .col-sm-10 {
+            width: 70%;
+            line-height: 30px;
+        }
+        .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+            float: left;
+        }
+        .my_hide {
+            display: none;
+        }
+        input[type=checkbox] {
+            margin-top: 8px;
+        }
+        .alert {
+            padding: 2px 10px 2px 10px;
+            font-size: 0.9em;
+        }
+    </style>
+    <script src="jquery-1.9.0.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="bootstrap3-typeahead.min.js"></script>
+    <script src="qrcode.min.js"></script>
+</head>
+<body>
+<div id="divError" class="alert alert-danger my_hide">
+    Please fill in the blanks and click Save.
+</div>
+<div id="divWarning" class="alert alert-info my_hide">
+</div>
+<div id="divNewVersion" class="alert alert-success my_hide">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <span class="msg"></span>
+</div>
+<div class="form-horizontal small">
+    <div class="form-group">
+        <label class="control-label col-sm-2 text-right" for="inputServerIP">Server IP</label>
+        <div class="controls col-sm-10">
+            <div class="input-append combo">
+                <div class="input-group">
+                    <input class="form-control input-sm" type="text" id="inputServerIP" data-key="server" autocomplete="off" data-provide="typeahead" placeholder="Server IP">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul id="serverIPMenu" class="dropdown-menu pull-right">
+                            <li class="server"><a tabindex="-1" href="#"><i class="icon-ok"></i> 123.123.123.123:8388</a> </li>
+                            <li class="server"><a tabindex="-1" href="#"><i class="icon-not-ok"></i> 123.123.123.123:8388</a></li>
+                            <li class="fixed insert-point divider"></li>
+                            <li class="fixed"><a id="buttonNewProfile" tabindex="-1" href="#"><i class="glyphicon glyphicon-plus"></i> Create A New Profile</a></li>
+                            <li class="fixed"><a id="buttonDeleteProfile" tabindex="-1" href="#"><i class="glyphicon glyphicon-trash"></i> Delete Current Profile</a></li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2 text-right" for="inputServerPort">Server Port</label>
+        <div class="controls col-sm-10">
+            <input type="text" class="form-control input-sm" id="inputServerPort" data-key="server_port" placeholder="Server Port">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2 text-right" for="inputPassword">Password</label>
+        <div class="controls col-sm-10">
+            <input type="password" class="form-control input-sm" id="inputPassword" data-key="password" placeholder="Password">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2 text-right" for="inputLocalPort">Local Port</label>
+        <div class="controls col-sm-10">
+            <input type="text" class="form-control input-sm" id="inputLocalPort" data-key="local_port" placeholder="Local Port" value="1080">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2 text-right" for="selectMethod">Encryption</label>
+        <div class="controls col-sm-10">
+            <select id="selectMethod" class="form-control input-sm" data-key="method">
+                <option value="aes-256-cfb" selected>AES-256-CFB</option>
+                <option value="aes-192-cfb">AES-192-CFB</option>
+                <option value="aes-128-cfb">AES-128-CFB</option>
+                <option value="bf-cfb">BF-CFB (Blowfish)</option>
+                <option value="camellia-256-cfb">CAMELLIA-256-CFB</option>
+                <option value="camellia-192-cfb">CAMELLIA-192-CFB</option>
+                <option value="camellia-128-cfb">CAMELLIA-128-CFB</option>
+                <option value="cast5-cfb">CAST5-cfb</option>
+                <option value="des-cfb">DES-CFB</option>
+                <option value="idea-cfb">IDEA-CFB</option>
+                <option value="rc2-cfb">RC2-CFB</option>
+                <option value="rc4">RC4</option>
+                <option value="rc4-md5">RC4-MD5</option>
+                <option value="seed-cfb">SEED-CFB</option>
+                <option value="table">Table</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2 text-right"> </label>
+        <div class="controls col-sm-10">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" data-key="share"> Share over LAN
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2 text-right"></label>
+        <div class="controls col-sm-10 text-right">
+            <div class="btn-group">
+                <button id="buttonSave" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> Save</button>
+                <button id="buttonQr" class="btn btn-default" title="QR Code" data-toggle="modal" data-target="#qrModal"><i class="glyphicon glyphicon-qrcode"></i></button>
+                <button id="buttonConsole" class="btn btn-default" title="Debug"><i class="glyphicon glyphicon-wrench"></i></button>
+                <button id="buttonAbout" class="btn btn-default" title="About"><i class="glyphicon glyphicon-info-sign"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="qrModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Scan with Shadowsocks mobile</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divQRCode"></div>
+                <script type="text/javascript">
+                    window.qrCode = new QRCode(document.getElementById("divQRCode"), {
+                            text: "test",
+                            width: 300,
+                            height: 300,
+                            colorDark : "#000000",
+                            colorLight : "#ffffff",
+                            correctLevel : QRCode.CorrectLevel.H
+                        });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>

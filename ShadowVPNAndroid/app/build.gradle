@@ -1,0 +1,28 @@
+apply plugin: 'com.android.application'
+
+android {
+	compileSdkVersion 21
+	buildToolsVersion "21.1.2"
+
+	defaultConfig {
+		applicationId "org.shadowvpn.shadowvpn"
+		minSdkVersion 15
+		targetSdkVersion 21
+		versionCode 1
+		versionName "1.0"
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
+}
+
+dependencies {
+	compile 'com.android.support:support-v4:21.0.3'
+	compile "com.android.support:appcompat-v7:21.0.3"
+	compile 'io.realm:realm-android:0.74.0'
+	compile 'com.marvinlabs:android-floatinglabel-widgets:1.5.0@aar'
+}
